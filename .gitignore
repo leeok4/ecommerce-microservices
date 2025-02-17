@@ -1,0 +1,26 @@
+# IDEs
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# Compiled files
+*.class
+*.jar
+*.war
+*.ear
+*.logs
+
+# Configurações locais
+application-local.yml
+application-local.properties
+
+# Outros
+.DS_Store
+.env
