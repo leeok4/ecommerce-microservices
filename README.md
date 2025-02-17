@@ -4,7 +4,77 @@
 Modern e-commerce system built with microservices architecture using Spring Cloud. This project demonstrates the implementation of scalable, resilient, and loosely coupled services.
 
 ## Architecture
-![Microservices Architecture](diagram-url-placeholder)
+
+```mermaid
+graph TD
+    Client([Client/Browser])
+    
+    subgraph Cloud[E-commerce Microservices]
+        Gateway[API Gateway:8080]
+        Registry[Service RegistryEureka :8761]
+        Config[Config Server:8888]
+        
+        subgraph Services[Business Services]
+            Products[Product Service:8081]
+            Orders[Order Service:8082]
+            Payments[Payment Service:8083]
+            Notifications[Notification Service:8084]
+        end
+        
+        subgraph Databases[Databases]
+            ProductDB[(Product DB)]
+            OrderDB[(Order DB)]
+            PaymentDB[(Payment DB)]
+        end
+    end
+
+    Client -->|HTTP/HTTPS| Gateway
+    Gateway -->|Load Balanced| Products
+    Gateway -->|Load Balanced| Orders
+    Gateway -->|Load Balanced| Payments
+    Gateway -->|Load Balanced| Notifications
+    
+    Products --> ProductDB
+    Orders --> OrderDB
+    Payments --> PaymentDB
+    
+    Products -.->|Register| Registry
+    Orders -.->|Register| Registry
+    Payments -.->|Register| Registry
+    Notifications -.->|Register| Registry
+    Gateway -.->|Register| Registry
+    
+    Products -->|Get Config| Config
+    Orders -->|Get Config| Config
+    Payments -->|Get Config| Config
+    Notifications -->|Get Config| Config
+    Gateway -->|Get Config| Config
+
+    Orders -->|Feign Client| Products
+    Payments -->|Feign Client| Orders
+    Notifications -->|Listen Events| Orders
+    
+    style Cloud fill:#f5f5f5,stroke:#333,stroke-width:2px
+    style Databases fill:#fff,stroke:#333,stroke-width:2px
+    style Services fill:#fff,stroke:#333,stroke-width:2px
+    
+    classDef service fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
+    classDef database fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px;
+    classDef infrastructure fill:#fce4ec,stroke:#880e4f,stroke-width:2px;
+    
+    class Products,Orders,Payments,Notifications service;
+    class ProductDB,OrderDB,PaymentDB database;
+    class Gateway,Registry,Config infrastructure;
+```
+
+### Service Interaction
+- **Client** makes requests through the **API Gateway**
+- **Gateway** routes requests to appropriate services
+- All services register with **Eureka** for service discovery
+- Services fetch configuration from **Config Server**
+- **Order Service** communicates with **Product Service** using Feign Client
+- **Payment Service** validates orders through **Order Service**
+- **Notification Service** listens to events from **Order Service**
 
 ### Services
 - **Service Registry (Eureka)**: Service discovery and registration
