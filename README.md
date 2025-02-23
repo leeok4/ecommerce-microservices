@@ -239,7 +239,7 @@ curl -X POST http://localhost:8080/api/products \
 ```bash
 curl -X POST http://localhost:8080/api/orders \
 -H "Content-Type: application/json" \
--d "{\"customerName\":\"John Doe\",\"customerEmail\":\"john@example.com\",\"shippingAddress\":\"123 Main St, City\",\"items\":[{\"productId\":1,\"quantity\":2}]}"
+-d "{\"customerName\":\"Leonardo Aquino\",\"customerEmail\":\"leeok4@example.com\",\"shippingAddress\":\"123 Main St, City\",\"items\":[{\"productId\":1,\"quantity\":2}]}"
 ```
 
 3. Verify the created order:
