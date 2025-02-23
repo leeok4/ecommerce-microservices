@@ -175,6 +175,91 @@ curl -X PUT http://localhost:8080/api/products/1 \
 curl -X DELETE http://localhost:8080/api/products/1
 ```
 
+### Order Service
+- Create Order: `POST /api/orders`
+```bash
+curl -X POST http://localhost:8080/api/orders \
+-H "Content-Type: application/json" \
+-d "{\"customerName\":\"John Doe\",\"customerEmail\":\"john@example.com\",\"shippingAddress\":\"123 Main St, City\",\"items\":[{\"productId\":1,\"quantity\":2}]}"
+```
+
+Example Response:
+```json
+{
+  "id": 1,
+  "customerName": "John Doe",
+  "customerEmail": "john@example.com",
+  "shippingAddress": "123 Main St, City",
+  "status": "PENDING",
+  "totalAmount": 199.98,
+  "orderDate": "2024-02-23T15:30:00",
+  "items": [
+    {
+      "productId": 1,
+      "productName": "Test Product",
+      "quantity": 2,
+      "price": 99.99,
+      "subtotal": 199.98
+    }
+  ]
+}
+```
+
+- Get Order by ID: `GET /api/orders/{id}`
+```bash
+curl -X GET http://localhost:8080/api/orders/1
+```
+
+- Get Customer Orders: `GET /api/orders/customer/{email}`
+```bash
+curl -X GET http://localhost:8080/api/orders/customer/john@example.com
+```
+
+- Update Order Status: `PUT /api/orders/{id}/status`
+```bash
+curl -X PUT http://localhost:8080/api/orders/1/status?status=CONFIRMED
+```
+
+#### Order Status Flow
+- PENDING: Initial state when order is created
+- CONFIRMED: Order is validated and confirmed
+- SHIPPED: Order has been shipped
+- DELIVERED: Order has been delivered
+- CANCELLED: Order has been cancelled
+
+#### Testing Flow Example
+1. Create a product first:
+```bash
+curl -X POST http://localhost:8080/api/products \
+-H "Content-Type: application/json" \
+-d "{\"name\":\"Test Product\",\"description\":\"Test Description\",\"price\":99.99,\"category\":\"Test\",\"stockQuantity\":100}"
+```
+
+2. Create an order using the product ID returned:
+```bash
+curl -X POST http://localhost:8080/api/orders \
+-H "Content-Type: application/json" \
+-d "{\"customerName\":\"John Doe\",\"customerEmail\":\"john@example.com\",\"shippingAddress\":\"123 Main St, City\",\"items\":[{\"productId\":1,\"quantity\":2}]}"
+```
+
+3. Verify the created order:
+```bash
+curl -X GET http://localhost:8080/api/orders/1
+```
+
+4. Update the order status:
+```bash
+curl -X PUT http://localhost:8080/api/orders/1/status?status=CONFIRMED
+```
+
+#### Database Verification
+```sql
+\c ecommerce_order
+SELECT * FROM orders;
+SELECT * FROM order_item;
+```
+
+
 ## Project Structure
 ```
 ecommerce-microservices/
