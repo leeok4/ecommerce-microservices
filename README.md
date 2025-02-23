@@ -180,15 +180,15 @@ curl -X DELETE http://localhost:8080/api/products/1
 ```bash
 curl -X POST http://localhost:8080/api/orders \
 -H "Content-Type: application/json" \
--d "{\"customerName\":\"John Doe\",\"customerEmail\":\"john@example.com\",\"shippingAddress\":\"123 Main St, City\",\"items\":[{\"productId\":1,\"quantity\":2}]}"
+-d "{\"customerName\":\"Leonardo Aquino\",\"customerEmail\":\"leeok4@example.com\",\"shippingAddress\":\"123 Main St, City\",\"items\":[{\"productId\":1,\"quantity\":2}]}"
 ```
 
 Example Response:
 ```json
 {
   "id": 1,
-  "customerName": "John Doe",
-  "customerEmail": "john@example.com",
+  "customerName": "Leonardo Aquino",
+  "customerEmail": "leeok4@example.com",
   "shippingAddress": "123 Main St, City",
   "status": "PENDING",
   "totalAmount": 199.98,
